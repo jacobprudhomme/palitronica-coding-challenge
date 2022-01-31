@@ -11,3 +11,5 @@ FROM debian:buster-slim
 COPY --from=builder /target/release/api .
 
 EXPOSE 8000
+
+ENTRYPOINT ["./api"]
