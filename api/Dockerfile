@@ -10,4 +10,4 @@ FROM debian:buster-slim
 
 COPY --from=builder /target/release/api .
 
-CMD ["./api"]
+EXPOSE 8000
