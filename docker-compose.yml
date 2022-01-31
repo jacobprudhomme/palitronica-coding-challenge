@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  api:
+    build: api
+    ports:
+      - "8000:8000"
+  ui:
+    build: ui
+    ports:
+      - "5000:80"
+  postgres:
+    image: "postgres:14-alpine"
