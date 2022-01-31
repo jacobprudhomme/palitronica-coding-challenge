@@ -4,8 +4,7 @@ import fastifyPostgres from 'fastify-postgres';
 const server = Fastify({ logger: true });
 
 server.register(fastifyPostgres, {
-  connectionString:
-    `postgres://${process.env.DB_USER || 'postgres'}@${process.env.DB_HOST || 'db'}/${process.env.DB_NAME || 'palitronica'}`,
+  connectionString: process.env.DB_URL || 'postgres://postgres@postgres/postgres',
 });
 
 server.get('/', async (req, _) => {

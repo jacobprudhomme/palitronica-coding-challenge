@@ -10,7 +10,7 @@ services:
     environment:
       - DB_URL=postgres://postgres:${password}@db/palitronica
     ports:
-      - 8000:8000
+      - 3000:3000
   ui:
     build: ui
     ports:

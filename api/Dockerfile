@@ -1,15 +1,12 @@
-# Builder
-FROM rust:1.58-slim-buster AS builder
+FROM node:16.13-alpine AS builder
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install
 
 COPY . .
 
-RUN cargo build --release
+EXPOSE 3000
 
-# Final Image
-FROM debian:buster-slim
-
-COPY --from=builder /target/release/api .
-
-EXPOSE 8000
-
-ENTRYPOINT ["./api"]
+ENTRYPOINT ["npm", "run", "start"]
