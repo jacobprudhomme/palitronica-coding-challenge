@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "fastify": "^3.27.0",
+    "fastify-postgres": "^3.6.0",
     "pg": "^8.7.1"
   }
 }
