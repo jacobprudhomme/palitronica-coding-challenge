@@ -10,6 +10,7 @@ FROM debian:buster-slim
 
 COPY --from=builder /target/release/api .
 
+ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 8000
 
 ENTRYPOINT ["./api"]
