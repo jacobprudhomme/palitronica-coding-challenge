@@ -1,7 +1,14 @@
 version: "3.9"
 services:
   api:
-    build: api
+    build:
+      context: api
+      args:
+        - password
+    depends_on:
+      - db
+    environment:
+      - DB_URL=postgres://postgres:${password}@db/palitronica
     ports:
       - "8000:8000"
   ui:
