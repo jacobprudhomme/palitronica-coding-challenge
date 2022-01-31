@@ -8,5 +8,12 @@ services:
     build: ui
     ports:
       - "5000:80"
-  postgres:
-    image: "postgres:14-alpine"
+  db:
+    build:
+      context: db
+      args:
+        - password
+    environment:
+      - POSTGRES_PASSWORD=${password}
+    ports:
+      - 5432:5432
