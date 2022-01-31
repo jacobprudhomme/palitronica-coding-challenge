@@ -1,9 +1,9 @@
-CREATE TABLE customer (
+CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE item (
+CREATE TABLE items (
   id SERIAL PRIMARY KEY,
   price MONEY NOT NULL
 );
