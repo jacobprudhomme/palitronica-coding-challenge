@@ -44,8 +44,8 @@ async function start() {
   }
 
   // Empty tables to start fresh
-  await dbClient.query('DELETE FROM customers');
-  await dbClient.query('DELETE FROM items');
+  await dbClient.query('TRUNCATE customers RESTART IDENTITY');
+  await dbClient.query('TRUNCATE items RESTART IDENTITY');
 
   // Seed database with data
   let data = seedData.customers.map(customer => Object.values(customer));
