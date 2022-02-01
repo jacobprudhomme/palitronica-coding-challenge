@@ -1,9 +1,19 @@
 import Fastify from 'fastify';
+import fastifyCors from 'fastify-cors';
 import fastifyPostgres from 'fastify-postgres';
 import format from 'pg-format';
 
 const server = Fastify({ logger: true });
 
+server.register(fastifyCors, {
+  origin: (origin, cb) => {
+    if (/localhost/.test(origin)) {
+      cb(null, true);
+      return;
+    }
+    cb(new Error('Disallowed origin'));
+  }
+})
 server.register(fastifyPostgres, {
   connectionString: process.env.DB_URL || 'postgres://postgres@postgres/postgres',
 });
