@@ -1,10 +1,24 @@
 <script>
-	export let name;
+	import { onMount } from 'svelte';
+
+	let items = [];
+	onMount(async () => {
+		const res = await fetch(`http://localhost:3000/items`);
+		items = await res.json();
+	});
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#if items.length > 0}
+		<h1>Here are the items:</h1>
+		<ul>
+			{#each items as item (item.id)}
+				<li>{item.id}</li>
+			{/each}
+		</ul>
+	{:else}
+		<p>Loading</p>
+	{/if}
 </main>
 
 <style>
