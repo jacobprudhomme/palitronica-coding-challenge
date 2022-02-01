@@ -46,6 +46,7 @@ server.get('/items', async (req, _) => {
     const query = format('SELECT * FROM items WHERE id IN (%L)', ids);
 
     ({ rows } = await dbClient.query(query));
+    dbClient.release();
 
     if (rows.length !== ids.length) {
       const returnedIds = rows.map(row => row.id);
@@ -54,6 +55,7 @@ server.get('/items', async (req, _) => {
     }
   } else {
     ({ rows } = await dbClient.query('SELECT * FROM items'));
+    dbClient.release();
   }
 
   return rows;
