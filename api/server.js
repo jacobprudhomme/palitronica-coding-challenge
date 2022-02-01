@@ -5,6 +5,9 @@ import format from 'pg-format';
 
 import seedData from './data/seedData.js';
 
+import customersRoutes from './routes/customersRoutes.js';
+import itemsRoutes from './routes/itemsRoutes.js';
+
 const server = Fastify({ logger: true });
 
 server.register(fastifyCors, {
@@ -20,55 +23,9 @@ server.register(fastifyPostgres, {
   connectionString: process.env.DB_URL || 'postgres://postgres@postgres/postgres',
 });
 
-/* GET customers */
-server.get('/customers', async (req, _) => {
-  const dbClient = await server.pg.connect();
-  const { rows } = await dbClient.query('SELECT * FROM customers');
-  dbClient.release();
-
-  return rows;
-});
-
-/* GET customer BY id */
-server.get('/customers/:id', async (req, _) => {
-  const dbClient = await server.pg.connect();
-  const { rows } = await dbClient.query(
-      'SELECT * FROM customers WHERE id=$1',
-      [req.params.id],
-    );
-  dbClient.release();
-
-  if (rows.length === 0) {
-    throw { statusCode: 404, message: `Customer with id ${req.params.id} does not exist` };
-  } else {
-    return rows[0];
-  }
-});
-
-/* GET items (BY ids) */
-server.get('/items', async (req, _) => {
-  const dbClient = await server.pg.connect();
-  let rows;
-
-  if (req.query.ids) {
-    const ids = req.query.ids.split(',').map(id => parseInt(id));
-    const query = format('SELECT * FROM items WHERE id IN (%L)', ids);
-
-    ({ rows } = await dbClient.query(query));
-    dbClient.release();
-
-    if (rows.length !== ids.length) {
-      const returnedIds = rows.map(row => row.id);
-      const missingIds = ids.filter(id => !returnedIds.includes(id));
-      throw { statusCode: 404, message: `Items with ids [${missingIds.join(',')}] do not exist` };
-    }
-  } else {
-    ({ rows } = await dbClient.query('SELECT * FROM items'));
-    dbClient.release();
-  }
-
-  return rows;
-});
+// Register routes
+server.register(customersRoutes);
+server.register(itemsRoutes);
 
 async function start() {
   try {
