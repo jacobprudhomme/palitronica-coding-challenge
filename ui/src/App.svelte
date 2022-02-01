@@ -1,10 +1,14 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let items = [];
+	let customers = null;
+	let items = null;
 	onMount(async () => {
-		const res = await fetch(`http://localhost:3000/items`);
+		let res = await fetch(`http://localhost:3000/items`);
 		items = await res.json();
+
+		res = await fetch(`http://localhost:3000/customers`);
+		customers = await res.json();
 	});
 </script>
 

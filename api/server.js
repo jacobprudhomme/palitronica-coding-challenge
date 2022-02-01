@@ -20,6 +20,15 @@ server.register(fastifyPostgres, {
   connectionString: process.env.DB_URL || 'postgres://postgres@postgres/postgres',
 });
 
+/* GET customers */
+server.get('/customers', async (req, _) => {
+  const dbClient = await server.pg.connect();
+  const { rows } = await dbClient.query('SELECT * FROM customers');
+  dbClient.release();
+
+  return rows;
+});
+
 /* GET customer BY id */
 server.get('/customers/:id', async (req, _) => {
   const dbClient = await server.pg.connect();
