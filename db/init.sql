@@ -1,6 +1,7 @@
 CREATE TABLE customers (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL
+  first VARCHAR(30) NOT NULL,
+  last VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE items (
