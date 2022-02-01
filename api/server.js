@@ -3,6 +3,8 @@ import fastifyCors from 'fastify-cors';
 import fastifyPostgres from 'fastify-postgres';
 import format from 'pg-format';
 
+import seedData from './data/seedData.js';
+
 const server = Fastify({ logger: true });
 
 server.register(fastifyCors, {
@@ -64,6 +66,28 @@ async function start() {
     server.log.error(err);
     process.exit(1);
   }
+
+  let dbClient;
+  try {
+    dbClient = await server.pg.connect();
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+
+  // Empty tables to start fresh
+  await dbClient.query('DELETE FROM customers');
+  await dbClient.query('DELETE FROM items');
+
+  // Seed database with data
+  let data = seedData.customers.map(customer => Object.values(customer));
+  let query = format('INSERT INTO customers(first, last) VALUES %L', data);
+  await dbClient.query(query);
+  data = seedData.items.map(item => Object.values(item));
+  query = format('INSERT INTO items(price) VALUES %L', data);
+  await dbClient.query(query);
+
+  dbClient.release();
 }
 
 start();
