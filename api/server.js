@@ -7,15 +7,19 @@ server.register(fastifyPostgres, {
   connectionString: process.env.DB_URL || 'postgres://postgres@postgres/postgres',
 });
 
-server.get('/', async (req, _) => {
+server.get('/customers/:id', async (req, _) => {
   const dbClient = await server.pg.connect();
   const { rows } = await dbClient.query(
-      'SELECT username FROM customers WHERE id=$1',
+      'SELECT * FROM customers WHERE id=$1',
       [req.params.id],
     );
   dbClient.release();
 
-  return rows;
+  if (rows.length === 0) {
+    throw { statusCode: 404, message: `Customer with id ${req.params.id} does not exist` };
+  } else {
+    return rows;
+  }
 });
 
 async function start() {
