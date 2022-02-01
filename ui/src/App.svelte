@@ -1,6 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 
+	let customerId;
+	let itemQty;
+
 	let customers = null;
 	let items = null;
 	onMount(async () => {
@@ -10,39 +13,37 @@
 		res = await fetch(`http://localhost:3000/customers`);
 		customers = await res.json();
 	});
+
+	function getPrice() {}
 </script>
 
 <main>
-	{#if items.length > 0}
-		<h1>Here are the items:</h1>
-		<ul>
-			{#each items as item (item.id)}
-				<li>{item.id}</li>
-			{/each}
-		</ul>
-	{:else}
+	{#if !items || !customers}
 		<p>Loading</p>
+	{:else}
+		<h1>Here are the items:</h1>
+		<form on:submit|preventDefault={getPrice}>
+			<div>
+				<label for="customer-id">Customer ID</label>
+				<select name="customer-id" bind:value={customerId}>
+					{#each customers as customer (customer.id)}
+						<option value={customer.id}>{customer.id} - {customer.first} {customer.last}</option>
+					{/each}
+				</select>
+			</div>
+
+
+			{#each items as item (item.id)}
+				<div>
+					<label for="item-${item.id}">Item {item.id}</label>
+					<input
+						type="number"
+						name="item-${item.id}"
+						placeholder="Input quantity"
+						bind:value={itemQty}
+					/>
+				</div>
+			{/each}
+		</form>
 	{/if}
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
