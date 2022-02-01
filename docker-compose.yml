@@ -1,21 +1,21 @@
-version: "3.9"
+version: '3.9'
 services:
   api:
     build: api
     depends_on:
       - db
     environment:
-      - DB_URL=postgres://postgres:palitronica@db/palitronica
+      - 'DB_URL=postgres://postgres:palitronica@db/palitronica'
     ports:
-      - 3000:3000
+      - '3000:3000'
   ui:
     build: ui
     ports:
-      - 5000:80
+      - '5000:80'
   db:
     build: db
     environment:
       - POSTGRES_PASSWORD=palitronica
       - POSTGRES_DB=palitronica
     ports:
-      - 5432:5432
+      - '5432:5432'
