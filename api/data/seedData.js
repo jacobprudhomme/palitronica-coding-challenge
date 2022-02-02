@@ -1,10 +1,10 @@
 export default {
   customers: [
-    { first: 'John', last: 'Smith' },
-    { first: 'Jane', last: 'Doe' },
-    { first: 'Billy Bobby', last: 'Joe' },
-    { first: 'Mr.', last: 'Worldwide' },
-    { first: 'T', last: 'Swift' },
+    { first: 'John', last: 'Smith', zipCode: '90210' },
+    { first: 'Jane', last: 'Doe', zipCode: '12345' },
+    { first: 'Billy Bobby', last: 'Joe', zipCode: '99501' },
+    { first: 'Mr.', last: 'Worldwide', zipCode: '60606' },
+    { first: 'Taylor', last: 'Swift', zipCode: '48202' },
   ],
   items: [
     { price: 12.50 },

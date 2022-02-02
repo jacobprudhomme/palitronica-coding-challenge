@@ -74,7 +74,7 @@ async function start() {
 
   // Seed database with data
   let data = seedData.customers.map(customer => Object.values(customer));
-  let query = format('INSERT INTO customers(first, last) VALUES %L', data);
+  let query = format('INSERT INTO customers(first, last, zipCode) VALUES %L', data);
   await dbClient.query(query);
   data = seedData.items.map(item => Object.values(item));
   query = format('INSERT INTO items(price) VALUES %L', data);
