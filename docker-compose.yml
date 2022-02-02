@@ -5,19 +5,21 @@ services:
     depends_on:
       - db
     environment:
-      - 'DB_URL=postgres://postgres:palitronica@db/palitronica'
+      - DB_URL=postgres://${DB_USER}:${DB_PASS}@db/${DB_NAME}
+      - TAXJAR_API_KEY=${TAXJAR_API_KEY}
     ports:
-      - '3000:3000'
+      - 3000:3000
   db:
     build: db
     environment:
-      - POSTGRES_PASSWORD=palitronica
-      - POSTGRES_DB=palitronica
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_USER=${DB_USER}
     ports:
-      - '5432:5432'
+      - 5432:5432
   ui:
     build: ui
     depends_on:
       - api
     ports:
-      - '5000:80'
+      - ${WEB_PORT}:80
