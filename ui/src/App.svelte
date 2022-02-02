@@ -6,8 +6,14 @@
 	let customerId;
 	let itemQty = Array(numItems);
 
+	let name = null;
+	let itemPrices = null;
+	let taxRate = null;
 	let price = null;
 	async function getPrice() {
+		name = null;
+		itemPrices = null;
+		taxRate = null;
 		price = null;
 
 		const res = await fetch('http://localhost:3000/payment', {
@@ -21,11 +27,9 @@
 		});
 		const { customerName, totalItemPrices, taxComponent, totalPrice } = await res.json();
 
-		console.log(customerName);
-		console.log(totalItemPrices);
-		console.log(taxComponent);
-		console.log(totalPrice);
-
+		name = customerName;
+		itemPrices = totalItemPrices;
+		taxRate = taxComponent;
 		price = totalPrice;
 	}
 </script>
@@ -52,13 +56,16 @@
 					bind:value={itemQty[id]}
 					required
 				/>
+				{#if itemPrices}
+					<p>Total Price: ${itemPrices[id]}</p>
+				{/if}
 			</div>
 		{/each}
 
 		<button type="submit">Submit</button>
 	</form>
 
-	{#if price}
-		<p>The price is ${price}</p>
+	{#if name && taxRate && price}
+		<p>With a tax rate of {taxRate * 100}%, customer {name}'s total order price comes to ${price}</p>
 	{/if}
 </main>
