@@ -4,7 +4,7 @@ export function parseMoney(money) {
 
 export function calculateTotalPrice(totalItemPrices, taxComponent) {
   // Truncated to 2 decimal points
-  const totalPriceFull = taxComponent * totalItemPrices.reduce(
+  const totalPriceFull = (1 + taxComponent) * totalItemPrices.reduce(
       (acc, totalItemPrice) => acc + totalItemPrice
     );
   const totalPriceAsString = totalPriceFull.toFixed(2);
