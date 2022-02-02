@@ -11,6 +11,7 @@
 	let taxRate = null;
 	let price = null;
 	async function getPrice() {
+		// Reset values first, for UI reasons
 		name = null;
 		itemPrices = null;
 		taxRate = null;
@@ -27,6 +28,7 @@
 		});
 		const { customerName, totalItemPrices, taxComponent, totalPrice } = await res.json();
 
+		// Set values
 		name = customerName;
 		itemPrices = totalItemPrices;
 		taxRate = taxComponent;
@@ -34,7 +36,7 @@
 	}
 </script>
 
-<main>
+<main class="container">
 	<form on:submit|preventDefault={getPrice}>
 		<div>
 			<label for="customer-id">Customer ID</label>
@@ -56,7 +58,9 @@
 					required
 				/>
 				{#if itemPrices}
-					<p>Total Price: ${itemPrices[id]}</p>
+					<span>Total Price: ${itemPrices[id].toFixed(2)}</span>
+				{:else}
+					<span></span> <!-- Empty span to fill column -->
 				{/if}
 			</div>
 		{/each}
@@ -65,24 +69,44 @@
 	</form>
 
 	{#if name && taxRate && price}
-		<p>With a tax rate of {taxRate * 100}%, customer {name}'s total order price comes to ${price}</p>
+		<p>With a tax rate of {taxRate * 100}%, customer {name}'s total order price comes to ${price.toFixed(2)}.</p>
 	{/if}
 </main>
 
 <style>
 	main {
-		width: 40vw;
-		margin: 0 auto;
-
 		display: flex;
 		flex-direction: column;
 	}
 
+	select {
+		margin: 10px 0;
+	}
+
 	.item-row {
 		display: flex;
+		align-items: center;
 	}
 
 	.item-row > label {
-		margin-right: 20px;
+		flex: 1;
+	}
+	.item-row > input {
+		flex: 6;
+		margin: 10px 0;
+	}
+	.item-row > span {
+		flex: 3;
+	}
+	.item-row > span {
+		margin-left: 20px;
+	}
+
+	button {
+		margin: 10px 0;
+	}
+
+	p {
+		margin: 0 auto;
 	}
 </style>
