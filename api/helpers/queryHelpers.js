@@ -31,10 +31,22 @@ export async function getItemPricesFromIds(dbClient, ids) {
   return itemPrices;
 };
 
-export async function getTaxComponentForCustomer(taxjarClient, id) {
-  const zipCode = '90210';
+export async function getTaxComponentForCustomer(dbClient, taxjarClient, id) {
+  const { rows } = await dbClient.query(
+      'SELECT zipCode FROM customers WHERE id=$1',
+      [id],
+    );
 
-  const res = await taxjarClient.ratesForLocation(zipCode);
+  if (rows.length === 0) {
+    throw { statusCode: 404, message: `Customer with id ${customerId} does not exist` };
+  }
+
+  let res;
+  try {
+    res = await taxjarClient.ratesForLocation(rows[0].zipcode);
+  } catch (err) {
+    throw { statusCode: 404, message: `${rows[0].zipcode} is not a valid or existing ZIP code` };
+  }
   const taxComponent = res.rate.combined_rate;
 
   return taxComponent;

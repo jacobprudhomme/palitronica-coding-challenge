@@ -42,10 +42,10 @@ server.post('/payment', async (req, _) => {
   const customerName = await getCustomerNameFromId(dbClient, customerId);
   const itemPrices = await getItemPricesFromIds(dbClient, itemIds);
   const totalItemPrices = itemPrices.map((price, i) => price * itemQty[i]);
+  const taxComponent = await getTaxComponentForCustomer(dbClient, taxjarClient, customerId);
 
   dbClient.release();
 
-  const taxComponent = await getTaxComponentForCustomer(taxjarClient, customerId);
   const totalPrice = calculateTotalPrice(totalItemPrices, taxComponent);
 
   return { customerName, totalItemPrices, taxComponent, totalPrice };
