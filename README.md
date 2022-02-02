@@ -9,4 +9,6 @@ To get everything up and running, run `docker-compose up --build`. On subsequent
 
 If you see something about port 80 being taken when trying to start the containers at the above step, choose another value for `WEB_PORT`. Ports in the ~`5000` and ~`8000` range are usually free.
 
+Starting the containers for the first time, chances are the API container will fail trying to connect to the database container, as the database container will be busy creating the necessary tables. For some reason, there is no way to avoid this, even by ordering the container dependencies in the `docker-compose.yml` file. All that needs to be done is to stop and start the containers again.
+
 Visit `http://localhost:<WEB_PORT>` in your browser to visit the app.
