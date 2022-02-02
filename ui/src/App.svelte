@@ -35,7 +35,6 @@
 </script>
 
 <main>
-	<h1>Here are the items:</h1>
 	<form on:submit|preventDefault={getPrice}>
 		<div>
 			<label for="customer-id">Customer ID</label>
@@ -47,7 +46,7 @@
 		</div>
 
 		{#each Array(numItems) as _, id (id)}
-			<div>
+			<div class="item-row">
 				<label for="item-{id + 1}">Item {id + 1}</label>
 				<input
 					type="number"
@@ -69,3 +68,21 @@
 		<p>With a tax rate of {taxRate * 100}%, customer {name}'s total order price comes to ${price}</p>
 	{/if}
 </main>
+
+<style>
+	main {
+		width: 40vw;
+		margin: 0 auto;
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	.item-row {
+		display: flex;
+	}
+
+	.item-row > label {
+		margin-right: 20px;
+	}
+</style>
