@@ -12,6 +12,7 @@
     "fastify-cors": "^6.0.2",
     "fastify-postgres": "^3.6.0",
     "pg": "^8.7.1",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "taxjar": "^4.0.0"
   }
 }
