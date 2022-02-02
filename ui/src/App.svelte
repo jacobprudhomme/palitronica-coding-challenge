@@ -1,49 +1,64 @@
 <script>
-	import { onMount } from 'svelte';
+	// Data is hardcoded, as specified
+	const numCustomers = 5;
+	const numItems = 5;
 
 	let customerId;
-	let itemQty;
+	let itemQty = Array(numItems);
 
-	let customers = null;
-	let items = null;
-	onMount(async () => {
-		let res = await fetch(`http://localhost:3000/items`);
-		items = await res.json();
+	let price = null;
+	async function getPrice() {
+		price = null;
 
-		res = await fetch(`http://localhost:3000/customers`);
-		customers = await res.json();
-	});
+		const res = await fetch('http://localhost:3000/payment', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				customerId,
+				itemIds: Array.from({ length: numItems }, (_, i) => i + 1),
+				itemQty,
+			}),
+		});
+		const { customerName, totalItemPrices, taxComponent, totalPrice } = await res.json();
 
-	function getPrice() {}
+		console.log(customerName);
+		console.log(totalItemPrices);
+		console.log(taxComponent);
+		console.log(totalPrice);
+
+		price = totalPrice;
+	}
 </script>
 
 <main>
-	{#if !items || !customers}
-		<p>Loading</p>
-	{:else}
-		<h1>Here are the items:</h1>
-		<form on:submit|preventDefault={getPrice}>
+	<h1>Here are the items:</h1>
+	<form on:submit|preventDefault={getPrice}>
+		<div>
+			<label for="customer-id">Customer ID</label>
+			<select name="customer-id" bind:value={customerId} required>
+				{#each Array(numCustomers) as _, id (id)}
+					<option value={id + 1}>{id + 1}</option>
+				{/each}
+			</select>
+		</div>
+
+		{#each Array(numItems) as _, id (id)}
 			<div>
-				<label for="customer-id">Customer ID</label>
-				<select name="customer-id" bind:value={customerId}>
-					{#each customers as customer (customer.id)}
-						<option value={customer.id}>{customer.id} - {customer.first} {customer.last}</option>
-					{/each}
-				</select>
+				<label for="item-{id + 1}">Item {id + 1}</label>
+				<input
+					type="number"
+					name="item-{id + 1}"
+					placeholder="Input quantity"
+					bind:value={itemQty[id]}
+					required
+				/>
 			</div>
+		{/each}
 
+		<button type="submit">Submit</button>
+	</form>
 
-			{#each items as item (item.id)}
-				<div>
-					<label for="item-${item.id}">Item {item.id}</label>
-					<input
-						type="number"
-						name="item-${item.id}"
-						placeholder="Input quantity"
-						bind:value={itemQty}
-					/>
-				</div>
-			{/each}
-		</form>
+	{#if price}
+		<p>The price is ${price}</p>
 	{/if}
 </main>
